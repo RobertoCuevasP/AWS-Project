@@ -4,28 +4,56 @@
    <!-- <mat-spinner *ngIf="isLoading"></mat-spinner>-->
 
     <mat-accordion multi="true" *ngIf="users.length > 0 ">
-        <mat-expansion-panel *ngFor="let user of users" style="background-color:forestgreen">
-            <mat-expansion-panel-header>{{ user.sk }} </mat-expansion-panel-header>
+        <mat-expansion-panel *ngFor="let user of users" style="background-color:#E9DAC1">
+            <mat-expansion-panel-header>Nombre: {{ user.sk }} </mat-expansion-panel-header>
                 <mat-accordion>
                     <p> Ganancias mensuales: {{ user.ganancias_mes}}</p>
                     <p> Saldo total: {{user.saldo_total}} </p>
+
                 </mat-accordion>
 
-                    <mat-expansion-panel *ngFor="let transaction of transactions" style="background-color:gray">
-                        <mat-expansion-panel-header> TRANSACCIONES </mat-expansion-panel-header>
-                            <mat-accordion>
-                                <p>
-                                    {{transaction.pk}}
-                                    {{transaction.sk}}
-                                    {{transaction.amount}}
-                                </p>
-        
-                            </mat-accordion>
-                        
-                    </mat-expansion-panel>
-        </mat-expansion-panel>
-    </mat-accordion>
+                <h2>Realizar una Transacción:</h2>
 
-    
-    
+                    <mat-expansion-panel style="background-color:#E4DCCF">
+                        <mat-expansion-panel-header>Nueva Transacción</mat-expansion-panel-header>
+                        <form (submit)="onSave(transactionForm)" #transactionForm="ngForm">
+                            <mat-form-field appearance="fill">
+                            <mat-label>Sender</mat-label>
+                                <mat-select [(value)]="sender">
+                                <mat-option value={{user.sk}}>{{user.sk}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="fill">
+                                <mat-label>Receiver</mat-label>
+                                    <mat-select [(value)]="receiver">
+                                    <mat-option  *ngFor="let option of users"  value={{option.sk}}>{{option.sk}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Amount">
+                            </mat-form-field>
+                    
+                            <button mat-raised-button type="submit">Guardar</button>
+                        </form>
+  
+                    </mat-expansion-panel>
+
+                
+
+                <h2>Transacciones:</h2>
+
+            <mat-expansion-panel *ngFor="let transaction of transactions | searchPipe:user.sk" style="background-color:#E4DCCF">
+                <mat-expansion-panel-header>{{transaction.pk}}</mat-expansion-panel-header>
+                    <mat-accordion>
+                         <p> pk: {{transaction.pk}}</p>
+                         <p> sk: {{transaction.sk}}</p>
+                         <p> amount: {{transaction.amount}}</p>
+        
+                    </mat-accordion>  
+            </mat-expansion-panel>
+ 
+        </mat-expansion-panel>
+    </mat-accordion>    
 </div>

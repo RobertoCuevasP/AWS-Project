@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ApiService } from './api.service';
 import { Transaction } from './transaction.model';
@@ -14,19 +15,24 @@ export class AppComponent implements OnInit {
   users: User[] = [];
   transactions: Transaction[] = [];
   private userSub: Subscription;
-  private transactionSub: Subscription; 
+  private transactionSub: Subscription;
+  sender: string;
+  receiver: string;
+  
 
   constructor(private apiService: ApiService){}
   ngOnInit(): void {
-    this.apiService.getUsers();/*.subscribe((users: User[]) => {
-      console.log(users);
-      this.users = users;
-    });*/
+    this.apiService.getUsers();
+    this.apiService.getTransactions();
+    
+
+   
     this.userSub = this.apiService.getUserUpdateListener()
       .subscribe((users: User[]) => {
         console.log(users);
         this.users = users
       });
+
 
       this.transactionSub = this.apiService.getTransactionUpdateListener()
       .subscribe((transactions: Transaction[]) => {
@@ -35,8 +41,20 @@ export class AppComponent implements OnInit {
       });
   }
 
+  filterTransactions(name:string) {
+    return this.transactions.filter((t) => t.pk.includes(name));
+  }
+
+    onSave(form: NgForm) {
+        this.apiService.postTransaction(form.value.sender,form.value.receiver,form.value.amount );
+        form.resetForm();
+
+    }
+
+  }
 
 
 
 
-}
+
+
