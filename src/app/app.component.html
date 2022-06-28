@@ -1,28 +1,28 @@
-<div *ngFor="let user of users">
-    <div>
-        {{user.pk}}
-        {{user.sk}}
-        {{user.ganancias_mes}}
-        {{user.nro_transacciones_dia}}
-        {{user.saldo_total}}
-    </div>
 
+<div style="width: 70%;margin:0 auto"  >
     <p class="titulo">Lista de Usuarios</p>
-    <mat-spinner *ngIf="isLoading"></mat-spinner>
+   <!-- <mat-spinner *ngIf="isLoading"></mat-spinner>-->
 
-    <mat-accordion multi="true" *ngIf="users.length > 0 && !isLoading">
-        <mat-expansion-panel *ngFor="let user of users">
-            <mat-expansion-panel-header>
-                {{ user.sk }}
-                {{ user.ganancias_mes}}
-                {{user.saldo_total}}
-            </mat-expansion-panel-header>
+    <mat-accordion multi="true" *ngIf="users.length > 0 ">
+        <mat-expansion-panel *ngFor="let user of users" style="background-color:forestgreen">
+            <mat-expansion-panel-header>{{ user.sk }} </mat-expansion-panel-header>
+                <mat-accordion>
+                    <p> Ganancias mensuales: {{ user.ganancias_mes}}</p>
+                    <p> Saldo total: {{user.saldo_total}} </p>
+                </mat-accordion>
 
-
-            <mat-action-row *ngIf="userIsAuthenticated && userId === post.creator">
-                <a mat-button color="primary" [routerLink]="['/edit', post.id]">EDIT</a>
-                <button mat-button color="warn" (click)="onDelete(post.id)">DELETE</button>
-            </mat-action-row>
+                    <mat-expansion-panel *ngFor="let transaction of transactions" style="background-color:gray">
+                        <mat-expansion-panel-header> TRANSACCIONES </mat-expansion-panel-header>
+                            <mat-accordion>
+                                <p>
+                                    {{transaction.pk}}
+                                    {{transaction.sk}}
+                                    {{transaction.amount}}
+                                </p>
+        
+                            </mat-accordion>
+                        
+                    </mat-expansion-panel>
         </mat-expansion-panel>
     </mat-accordion>
 

@@ -4,10 +4,8 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatExpansionModule } from '@angular/material/expansion';
 
-import {FormsModule} from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
 
 
 @NgModule({
@@ -18,9 +16,8 @@ import { MatButtonModule } from '@angular/material/button';
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    MatInputModule,
-    MatButtonModule,
-    FormsModule
+    MatExpansionModule
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

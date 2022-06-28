@@ -10,6 +10,8 @@ import { Transaction } from "./transaction.model";
 export class ApiService {
   private users: User[] = [];
   private usersUpdated = new Subject<User[]>();
+  private transactions: Transaction[] = [];
+  private transactionsUpdated = new Subject<Transaction[]>();
   
   constructor(private http: HttpClient) {}
 
@@ -39,10 +41,11 @@ export class ApiService {
     return this.usersUpdated.asObservable();
   }
 
-  getTransactionsByUser(id: string){
+
+  getTransactions(){
     this.http
       .get<Transaction[]>(
-        'https://qazuzesou2.execute-api.us-east-1.amazonaws.com/prod/transactions/'+ id
+        'https://qazuzesou2.execute-api.us-east-1.amazonaws.com/prod/transactions'
       )
       .pipe(map((transactionData) => {
         return transactionData.map(transaction => {
@@ -53,8 +56,17 @@ export class ApiService {
             anomaly: transaction.anomaly
           };
         });
-      }));
+      }))
+      .subscribe(transformedTransactions => {
+        this.transactions = transformedTransactions;
+        this.transactionsUpdated.next([...this.transactions]);
+      });
 
+  }
+
+  
+  getTransactionUpdateListener() {
+    return this.transactionsUpdated.asObservable();
   }
 
   postTransaction(sender: string, receiver: string, amount: string){
